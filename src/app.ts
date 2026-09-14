@@ -1,7 +1,7 @@
 import express, { type NextFunction, type Request, type Response } from 'express';
 import { ZodError, type ZodTypeAny, type z } from 'zod';
 import { HttpError, NotFoundError } from './errors';
-import { rankCandidatesForJob, rankJobsForCandidate, resolveWeights } from './scoring';
+import { rankCandidatesForJob, rankJobsForCandidate, resolveWeights, type Weights } from './scoring';
 import type { Store } from './storage/store';
 import { candidateSchema, jobSchema, recommendationQuerySchema, type RecommendationQuery } from './validation';
 
@@ -33,6 +33,14 @@ function weightsFromQuery(query: RecommendationQuery) {
     throw new HttpError(400, 'Invalid weights', [{ path: 'weights', message: (err as Error).message }]);
   }
 }
+
+/** Weights are echoed rounded to match the `max` values in each breakdown. */
+const roundWeights = (w: Weights): Weights => ({
+  skills: Math.round(w.skills * 10) / 10,
+  experience: Math.round(w.experience * 10) / 10,
+  location: Math.round(w.location * 10) / 10,
+  salary: Math.round(w.salary * 10) / 10,
+});
 
 /**
  * Builds the Express app around a Store. Keeping this a factory makes it easy
@@ -88,7 +96,7 @@ export function createApp(store: Store) {
 
     res.json({
       candidateId: candidate.id,
-      weights,
+      weights: roundWeights(weights),
       count: recommendations.length,
       recommendations: recommendations.map(({ job, score, breakdown }) => ({
         jobId: job.id,
@@ -128,7 +136,7 @@ export function createApp(store: Store) {
 
     res.json({
       jobId: job.id,
-      weights,
+      weights: roundWeights(weights),
       count: recommendations.length,
       recommendations: recommendations.map(({ candidate, score, breakdown }) => ({
         candidateId: candidate.id,
