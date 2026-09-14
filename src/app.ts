@@ -22,12 +22,16 @@ function formatZodError(error: ZodError) {
 }
 
 function weightsFromQuery(query: RecommendationQuery) {
-  return resolveWeights({
-    skills: query.skillsWeight,
-    experience: query.experienceWeight,
-    location: query.locationWeight,
-    salary: query.salaryWeight,
-  });
+  try {
+    return resolveWeights({
+      skills: query.skillsWeight,
+      experience: query.experienceWeight,
+      location: query.locationWeight,
+      salary: query.salaryWeight,
+    });
+  } catch (err) {
+    throw new HttpError(400, 'Invalid weights', [{ path: 'weights', message: (err as Error).message }]);
+  }
 }
 
 /**
