@@ -147,6 +147,7 @@ docker compose down -v     # stop and drop the database volume
 | `GET`  | `/jobs/:id`                             | Fetch a job                                              |
 | `GET`  | `/jobs/:id/recommendations`             | **Bonus** - ranked candidates for a job (reverse view)   |
 | `GET`  | `/health`                               | Liveness check                                           |
+| `GET`  | `/`                                     | Endpoint index (handy in a browser)                      |
 
 ### Request bodies
 
@@ -374,7 +375,7 @@ view.
 npm test
 ```
 
-46 tests, split into:
+47 tests, split into:
 
 - **`tests/scoring.test.ts` (31)** - the must-have hard filter (including case/whitespace
   normalisation and a skill listed under both priorities), each dimension's boundaries
@@ -382,7 +383,7 @@ npm test
   location), the composite score summing to 100, weight normalisation, ranking order,
   `limit`, and the reverse view. Both edge cases named in the brief - *candidate missing a
   must-have skill* and *job with no salary overlap* - are covered explicitly.
-- **`tests/api.test.ts` (15)** - request validation, 400/404 responses, `limit`, weight
+- **`tests/api.test.ts` (16)** - request validation, 400/404 responses, `limit`, weight
   overrides, empty results, and both recommendation endpoints end-to-end against the
   in-memory store.
 

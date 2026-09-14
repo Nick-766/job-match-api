@@ -42,6 +42,23 @@ export function createApp(store: Store) {
   const app = express();
   app.use(express.json());
 
+  app.get('/', (_req, res) => {
+    res.json({
+      name: 'Job Match API',
+      endpoints: {
+        'POST /candidates': 'create a candidate profile',
+        'GET /candidates/:id': 'fetch a candidate',
+        'GET /candidates/:id/recommendations?limit=10': 'ranked jobs for a candidate',
+        'POST /jobs': 'create a job posting',
+        'GET /jobs/:id': 'fetch a job',
+        'GET /jobs/:id/recommendations?limit=10': 'ranked candidates for a job',
+        'GET /health': 'liveness check',
+      },
+      weightParams: ['skillsWeight', 'experienceWeight', 'locationWeight', 'salaryWeight'],
+      docs: 'https://github.com/Nick-766/job-match-api#readme',
+    });
+  });
+
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok' });
   });

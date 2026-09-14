@@ -183,6 +183,13 @@ describe('API', () => {
     });
   });
 
+  it('serves an endpoint index at the root', async () => {
+    const res = await request(app).get('/');
+    expect(res.status).toBe(200);
+    expect(res.body.name).toBe('Job Match API');
+    expect(Object.keys(res.body.endpoints)).toContain('GET /candidates/:id/recommendations?limit=10');
+  });
+
   it('404s for unknown routes', async () => {
     const res = await request(app).get('/nothing-here');
     expect(res.status).toBe(404);
