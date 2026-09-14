@@ -360,6 +360,12 @@ src/
 tests/
   scoring.test.ts          scoring engine unit tests (the important ones)
   api.test.ts              HTTP integration tests via supertest
+scripts/
+  smoke.sh, smoke.ps1      seed dummy data and call every endpoint (bash / PowerShell)
+postman/
+  *.postman_collection.json   Postman collection (35 requests, 93 assertions) + environment
+  generate.js              builds the collection from one source of truth
+TESTING.md                 manual testing guide: run commands, every endpoint, expected output
 Dockerfile, docker-compose.yml
 ```
 
@@ -386,6 +392,12 @@ npm test
 - **`tests/api.test.ts` (16)** - request validation, 400/404 responses, `limit`, weight
   overrides, empty results, and both recommendation endpoints end-to-end against the
   in-memory store.
+
+For manual / exploratory testing see [`TESTING.md`](TESTING.md): a curl walkthrough of
+every endpoint with expected scores, one-shot smoke scripts (`scripts/smoke.sh`,
+`scripts/smoke.ps1`) that seed dummy data and hit everything, and a Postman collection
+in [`postman/`](postman/) that can also be run headless with
+`npx newman run postman/job-match-api.postman_collection.json -e postman/local.postman_environment.json`.
 
 ---
 

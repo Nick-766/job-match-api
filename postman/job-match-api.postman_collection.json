@@ -1,0 +1,1503 @@
+{
+  "info": {
+    "name": "Job Match API",
+    "description": "Rule-based job recommendation API.\n\nRun the folders top to bottom (or use the Collection Runner on the whole collection) - the \"Seed\" requests store ids in collection variables that later requests use.\n\nSet `baseUrl` (default http://localhost:3000). Start the API with `npm run dev` or `docker compose up`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "ashaId",
+      "value": ""
+    },
+    {
+      "key": "raviId",
+      "value": ""
+    },
+    {
+      "key": "meeraId",
+      "value": ""
+    },
+    {
+      "key": "juniorId",
+      "value": ""
+    },
+    {
+      "key": "fresherId",
+      "value": ""
+    },
+    {
+      "key": "backendJobId",
+      "value": ""
+    },
+    {
+      "key": "localJobId",
+      "value": ""
+    },
+    {
+      "key": "rustJobId",
+      "value": ""
+    },
+    {
+      "key": "staffJobId",
+      "value": ""
+    },
+    {
+      "key": "pythonJobId",
+      "value": ""
+    },
+    {
+      "key": "internJobId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health & index",
+      "item": [
+        {
+          "name": "GET / (endpoint index)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"lists endpoints\", () => pm.expect(pm.response.json().endpoints).to.be.an(\"object\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"status ok\", () => pm.expect(pm.response.json().status).to.equal(\"ok\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1. Seed candidates (POST /candidates)",
+      "item": [
+        {
+          "name": "Create Asha Verma",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Asha Verma\",\n  \"skills\": [\n    \"TypeScript\",\n    \"Node.js\",\n    \"PostgreSQL\"\n  ],\n  \"yearsOfExperience\": 3,\n  \"location\": \"Bangalore\",\n  \"expectedSalary\": 1200000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/candidates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"ashaId\", b.id);",
+                  "console.log(\"Asha Verma id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Ravi Kumar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ravi Kumar\",\n  \"skills\": [\n    \"TypeScript\",\n    \"Node.js\",\n    \"Docker\",\n    \"AWS\"\n  ],\n  \"yearsOfExperience\": 7,\n  \"location\": \"Pune\",\n  \"expectedSalary\": 2500000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/candidates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"raviId\", b.id);",
+                  "console.log(\"Ravi Kumar id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Meera Nair",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Meera Nair\",\n  \"skills\": [\n    \"Python\",\n    \"Django\",\n    \"PostgreSQL\"\n  ],\n  \"yearsOfExperience\": 5,\n  \"location\": \"Mumbai\",\n  \"expectedSalary\": 1500000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/candidates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"meeraId\", b.id);",
+                  "console.log(\"Meera Nair id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Dev Junior",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dev Junior\",\n  \"skills\": [\n    \"TypeScript\",\n    \"Node.js\"\n  ],\n  \"yearsOfExperience\": 1,\n  \"location\": \"Pune\",\n  \"expectedSalary\": 800000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/candidates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"juniorId\", b.id);",
+                  "console.log(\"Dev Junior id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Nikhil Fresher",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nikhil Fresher\",\n  \"skills\": [\n    \"JavaScript\",\n    \"React\"\n  ],\n  \"yearsOfExperience\": 0,\n  \"location\": \"Delhi\",\n  \"expectedSalary\": 500000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/candidates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"fresherId\", b.id);",
+                  "console.log(\"Nikhil Fresher id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Seed jobs (POST /jobs)",
+      "item": [
+        {
+          "name": "Create Backend Engineer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Backend Engineer\",\n  \"requiredSkills\": [\n    {\n      \"name\": \"TypeScript\",\n      \"priority\": \"must-have\"\n    },\n    {\n      \"name\": \"Node.js\",\n      \"priority\": \"must-have\"\n    },\n    {\n      \"name\": \"Docker\",\n      \"priority\": \"nice-to-have\"\n    }\n  ],\n  \"minYearsExperience\": 2,\n  \"location\": \"Pune\",\n  \"salaryRange\": {\n    \"min\": 1000000,\n    \"max\": 1500000\n  },\n  \"remoteAllowed\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"backendJobId\", b.id);",
+                  "console.log(\"Backend Engineer id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Local TS Engineer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Local TS Engineer\",\n  \"requiredSkills\": [\n    {\n      \"name\": \"TypeScript\",\n      \"priority\": \"must-have\"\n    },\n    {\n      \"name\": \"Node.js\",\n      \"priority\": \"must-have\"\n    },\n    {\n      \"name\": \"Docker\",\n      \"priority\": \"nice-to-have\"\n    }\n  ],\n  \"minYearsExperience\": 2,\n  \"location\": \"Bangalore\",\n  \"salaryRange\": {\n    \"min\": 1000000,\n    \"max\": 1500000\n  },\n  \"remoteAllowed\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"localJobId\", b.id);",
+                  "console.log(\"Local TS Engineer id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Rust Developer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Rust Developer\",\n  \"requiredSkills\": [\n    {\n      \"name\": \"Rust\",\n      \"priority\": \"must-have\"\n    }\n  ],\n  \"minYearsExperience\": 0,\n  \"location\": \"Bangalore\",\n  \"salaryRange\": {\n    \"min\": 2000000,\n    \"max\": 3000000\n  },\n  \"remoteAllowed\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"rustJobId\", b.id);",
+                  "console.log(\"Rust Developer id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Staff Engineer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Staff Engineer\",\n  \"requiredSkills\": [\n    {\n      \"name\": \"TypeScript\",\n      \"priority\": \"must-have\"\n    },\n    {\n      \"name\": \"AWS\",\n      \"priority\": \"nice-to-have\"\n    }\n  ],\n  \"minYearsExperience\": 6,\n  \"location\": \"Mumbai\",\n  \"salaryRange\": {\n    \"min\": 600000,\n    \"max\": 900000\n  },\n  \"remoteAllowed\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"staffJobId\", b.id);",
+                  "console.log(\"Staff Engineer id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Python Developer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Python Developer\",\n  \"requiredSkills\": [\n    {\n      \"name\": \"Python\",\n      \"priority\": \"must-have\"\n    },\n    {\n      \"name\": \"Django\",\n      \"priority\": \"nice-to-have\"\n    },\n    {\n      \"name\": \"PostgreSQL\",\n      \"priority\": \"nice-to-have\"\n    }\n  ],\n  \"minYearsExperience\": 3,\n  \"location\": \"Mumbai\",\n  \"salaryRange\": {\n    \"min\": 1400000,\n    \"max\": 2000000\n  },\n  \"remoteAllowed\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"pythonJobId\", b.id);",
+                  "console.log(\"Python Developer id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Intern (any stack)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Intern (any stack)\",\n  \"requiredSkills\": [],\n  \"minYearsExperience\": 0,\n  \"location\": \"Delhi\",\n  \"salaryRange\": {\n    \"min\": 300000,\n    \"max\": 600000\n  },\n  \"remoteAllowed\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has id\", () => pm.expect(b.id).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"internJobId\", b.id);",
+                  "console.log(\"Intern (any stack) id =\", b.id);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Fetch by id",
+      "item": [
+        {
+          "name": "GET /candidates/:id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{ashaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{ashaId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"returns Asha\", () => pm.expect(pm.response.json().name).to.equal(\"Asha Verma\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /jobs/:id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/{{backendJobId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "{{backendJobId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"returns Backend Engineer\", () => pm.expect(pm.response.json().title).to.equal(\"Backend Engineer\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Recommendations for a candidate",
+      "item": [
+        {
+          "name": "Asha - default weights",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{ashaId}}/recommendations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{ashaId}}",
+                "recommendations"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has weights, count and recommendations\", () => {",
+                  "  pm.expect(b.weights).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "  pm.expect(b.count).to.equal(b.recommendations.length);",
+                  "});",
+                  "pm.test(\"scores are 0-100 and sorted descending\", () => {",
+                  "  let prev = 101;",
+                  "  for (const r of b.recommendations) { pm.expect(r.score).to.be.within(0, 100); pm.expect(r.score).to.be.at.most(prev); prev = r.score; }",
+                  "});",
+                  "pm.test(\"every result has a 4-part breakdown\", () => {",
+                  "  for (const r of b.recommendations) pm.expect(r.breakdown).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "});",
+                  "pm.test(\"Rust job is excluded (must-have filter)\", () => pm.expect(b.recommendations.map(r => r.jobId)).to.not.include(pm.collectionVariables.get(\"rustJobId\")));",
+                  "pm.test(\"Local TS Engineer ranks first with 86.4\", () => { pm.expect(b.recommendations[0].title).to.equal(\"Local TS Engineer\"); pm.expect(b.recommendations[0].score).to.equal(86.4); });",
+                  "pm.test(\"default weights are 50/20/15/15\", () => pm.expect(b.weights).to.eql({ skills: 50, experience: 20, location: 15, salary: 15 }));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asha - limit=2",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{ashaId}}/recommendations?limit=2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{ashaId}}",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has weights, count and recommendations\", () => {",
+                  "  pm.expect(b.weights).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "  pm.expect(b.count).to.equal(b.recommendations.length);",
+                  "});",
+                  "pm.test(\"scores are 0-100 and sorted descending\", () => {",
+                  "  let prev = 101;",
+                  "  for (const r of b.recommendations) { pm.expect(r.score).to.be.within(0, 100); pm.expect(r.score).to.be.at.most(prev); prev = r.score; }",
+                  "});",
+                  "pm.test(\"every result has a 4-part breakdown\", () => {",
+                  "  for (const r of b.recommendations) pm.expect(r.breakdown).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "});",
+                  "pm.test(\"returns at most 2\", () => pm.expect(b.recommendations.length).to.be.at.most(2));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asha - salaryWeight=50 (custom weights)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{ashaId}}/recommendations?salaryWeight=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{ashaId}}",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "salaryWeight",
+                  "value": "50"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has weights, count and recommendations\", () => {",
+                  "  pm.expect(b.weights).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "  pm.expect(b.count).to.equal(b.recommendations.length);",
+                  "});",
+                  "pm.test(\"scores are 0-100 and sorted descending\", () => {",
+                  "  let prev = 101;",
+                  "  for (const r of b.recommendations) { pm.expect(r.score).to.be.within(0, 100); pm.expect(r.score).to.be.at.most(prev); prev = r.score; }",
+                  "});",
+                  "pm.test(\"every result has a 4-part breakdown\", () => {",
+                  "  for (const r of b.recommendations) pm.expect(r.breakdown).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "});",
+                  "pm.test(\"weights are re-normalised to 100\", () => { const w = b.weights; pm.expect(Math.round(w.skills + w.experience + w.location + w.salary)).to.equal(100); pm.expect(w.salary).to.equal(37); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asha - equal weights",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{ashaId}}/recommendations?skillsWeight=1&experienceWeight=1&locationWeight=1&salaryWeight=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{ashaId}}",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "skillsWeight",
+                  "value": "1"
+                },
+                {
+                  "key": "experienceWeight",
+                  "value": "1"
+                },
+                {
+                  "key": "locationWeight",
+                  "value": "1"
+                },
+                {
+                  "key": "salaryWeight",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has weights, count and recommendations\", () => {",
+                  "  pm.expect(b.weights).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "  pm.expect(b.count).to.equal(b.recommendations.length);",
+                  "});",
+                  "pm.test(\"scores are 0-100 and sorted descending\", () => {",
+                  "  let prev = 101;",
+                  "  for (const r of b.recommendations) { pm.expect(r.score).to.be.within(0, 100); pm.expect(r.score).to.be.at.most(prev); prev = r.score; }",
+                  "});",
+                  "pm.test(\"every result has a 4-part breakdown\", () => {",
+                  "  for (const r of b.recommendations) pm.expect(r.breakdown).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "});",
+                  "pm.test(\"weights are 25 each\", () => pm.expect(b.weights).to.eql({ skills: 25, experience: 25, location: 25, salary: 25 }));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Fresher - only jobs with no must-haves",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{fresherId}}/recommendations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{fresherId}}",
+                "recommendations"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has weights, count and recommendations\", () => {",
+                  "  pm.expect(b.weights).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "  pm.expect(b.count).to.equal(b.recommendations.length);",
+                  "});",
+                  "pm.test(\"scores are 0-100 and sorted descending\", () => {",
+                  "  let prev = 101;",
+                  "  for (const r of b.recommendations) { pm.expect(r.score).to.be.within(0, 100); pm.expect(r.score).to.be.at.most(prev); prev = r.score; }",
+                  "});",
+                  "pm.test(\"every result has a 4-part breakdown\", () => {",
+                  "  for (const r of b.recommendations) pm.expect(r.breakdown).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "});",
+                  "pm.test(\"only the Intern job\", () => { pm.expect(b.count).to.equal(1); pm.expect(b.recommendations[0].title).to.equal(\"Intern (any stack)\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Ravi - salary above every range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{raviId}}/recommendations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{raviId}}",
+                "recommendations"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has weights, count and recommendations\", () => {",
+                  "  pm.expect(b.weights).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "  pm.expect(b.count).to.equal(b.recommendations.length);",
+                  "});",
+                  "pm.test(\"scores are 0-100 and sorted descending\", () => {",
+                  "  let prev = 101;",
+                  "  for (const r of b.recommendations) { pm.expect(r.score).to.be.within(0, 100); pm.expect(r.score).to.be.at.most(prev); prev = r.score; }",
+                  "});",
+                  "pm.test(\"every result has a 4-part breakdown\", () => {",
+                  "  for (const r of b.recommendations) pm.expect(r.breakdown).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "});",
+                  "pm.test(\"salary dimension is 0 on every job\", () => { for (const r of b.recommendations) pm.expect(r.breakdown.salary.score).to.equal(0); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Reverse view (GET /jobs/:id/recommendations)",
+      "item": [
+        {
+          "name": "Backend Engineer - best candidates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/{{backendJobId}}/recommendations?limit=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "{{backendJobId}}",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has weights, count and recommendations\", () => {",
+                  "  pm.expect(b.weights).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "  pm.expect(b.count).to.equal(b.recommendations.length);",
+                  "});",
+                  "pm.test(\"scores are 0-100 and sorted descending\", () => {",
+                  "  let prev = 101;",
+                  "  for (const r of b.recommendations) { pm.expect(r.score).to.be.within(0, 100); pm.expect(r.score).to.be.at.most(prev); prev = r.score; }",
+                  "});",
+                  "pm.test(\"every result has a 4-part breakdown\", () => {",
+                  "  for (const r of b.recommendations) pm.expect(r.breakdown).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "});",
+                  "pm.test(\"Ravi > Asha > Junior; Meera and Fresher excluded\", () => pm.expect(b.recommendations.map(r => r.name)).to.eql([\"Ravi Kumar\", \"Asha Verma\", \"Dev Junior\"]));",
+                  "pm.test(\"Junior is penalised on experience, not excluded\", () => pm.expect(b.recommendations[2].breakdown.experience.score).to.equal(10));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Python Developer - only Meera qualifies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/{{pythonJobId}}/recommendations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "{{pythonJobId}}",
+                "recommendations"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has weights, count and recommendations\", () => {",
+                  "  pm.expect(b.weights).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "  pm.expect(b.count).to.equal(b.recommendations.length);",
+                  "});",
+                  "pm.test(\"scores are 0-100 and sorted descending\", () => {",
+                  "  let prev = 101;",
+                  "  for (const r of b.recommendations) { pm.expect(r.score).to.be.within(0, 100); pm.expect(r.score).to.be.at.most(prev); prev = r.score; }",
+                  "});",
+                  "pm.test(\"every result has a 4-part breakdown\", () => {",
+                  "  for (const r of b.recommendations) pm.expect(r.breakdown).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "});",
+                  "pm.test(\"only Meera\", () => { pm.expect(b.count).to.equal(1); pm.expect(b.recommendations[0].name).to.equal(\"Meera Nair\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rust Developer - nobody qualifies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/{{rustJobId}}/recommendations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "{{rustJobId}}",
+                "recommendations"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test(\"has weights, count and recommendations\", () => {",
+                  "  pm.expect(b.weights).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "  pm.expect(b.count).to.equal(b.recommendations.length);",
+                  "});",
+                  "pm.test(\"scores are 0-100 and sorted descending\", () => {",
+                  "  let prev = 101;",
+                  "  for (const r of b.recommendations) { pm.expect(r.score).to.be.within(0, 100); pm.expect(r.score).to.be.at.most(prev); prev = r.score; }",
+                  "});",
+                  "pm.test(\"every result has a 4-part breakdown\", () => {",
+                  "  for (const r of b.recommendations) pm.expect(r.breakdown).to.have.all.keys(\"skills\", \"experience\", \"location\", \"salary\");",
+                  "});",
+                  "pm.test(\"empty list\", () => pm.expect(b.count).to.equal(0));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. Error cases",
+      "item": [
+        {
+          "name": "400 - invalid candidate body",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"skills\": \"not-a-list\",\n  \"yearsOfExperience\": -1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/candidates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"field-level details\", () => { const d = pm.response.json().details.map(x => x.path); pm.expect(d).to.include.members([\"name\", \"skills\", \"yearsOfExperience\", \"location\", \"expectedSalary\"]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "400 - inverted salary range + bad priority",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Bad Job\",\n  \"requiredSkills\": [\n    {\n      \"name\": \"Go\",\n      \"priority\": \"optional\"\n    }\n  ],\n  \"minYearsExperience\": 0,\n  \"location\": \"Pune\",\n  \"salaryRange\": {\n    \"min\": 10,\n    \"max\": 5\n  },\n  \"remoteAllowed\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/jobs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"reports both problems\", () => { const d = pm.response.json().details.map(x => x.path); pm.expect(d).to.include(\"salaryRange.max\"); pm.expect(d).to.include(\"requiredSkills.0.priority\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "400 - malformed JSON",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{oops",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/candidates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"malformed JSON message\", () => pm.expect(pm.response.json().error).to.equal(\"Malformed JSON body\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "400 - limit=0",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{ashaId}}/recommendations?limit=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{ashaId}}",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "400 - limit=abc",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{ashaId}}/recommendations?limit=abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{ashaId}}",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "abc"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "400 - all-zero weights",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/{{ashaId}}/recommendations?skillsWeight=0&experienceWeight=0&locationWeight=0&salaryWeight=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "{{ashaId}}",
+                "recommendations"
+              ],
+              "query": [
+                {
+                  "key": "skillsWeight",
+                  "value": "0"
+                },
+                {
+                  "key": "experienceWeight",
+                  "value": "0"
+                },
+                {
+                  "key": "locationWeight",
+                  "value": "0"
+                },
+                {
+                  "key": "salaryWeight",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Invalid weights\", () => pm.expect(pm.response.json().error).to.equal(\"Invalid weights\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "404 - unknown candidate",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/does-not-exist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "does-not-exist"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "404 - unknown candidate recommendations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/candidates/does-not-exist/recommendations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "candidates",
+                "does-not-exist",
+                "recommendations"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "404 - unknown job",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/does-not-exist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "does-not-exist"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "404 - unknown job recommendations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/jobs/does-not-exist/recommendations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "jobs",
+                "does-not-exist",
+                "recommendations"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "404 - unknown route",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/nothing-here",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nothing-here"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
