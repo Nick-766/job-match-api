@@ -1,10 +1,18 @@
 import { createApp } from './app';
 import { InMemoryStore } from './storage/memory';
+import { PostgresStore } from './storage/postgres';
 import type { Store } from './storage/store';
 
 const PORT = Number(process.env.PORT ?? 3000);
 
+/** Postgres when DATABASE_URL is set (docker-compose), in-memory otherwise. */
 function createStore(): Store {
+  const url = process.env.DATABASE_URL;
+  if (url) {
+    console.log('Using Postgres storage');
+    return new PostgresStore(url);
+  }
+  console.log('Using in-memory storage (set DATABASE_URL to use Postgres)');
   return new InMemoryStore();
 }
 
